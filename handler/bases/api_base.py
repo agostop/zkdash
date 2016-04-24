@@ -13,10 +13,10 @@ from handler.bases import CommonBaseHandler
 
 
 class ApiBaseHandler(CommonBaseHandler):
-    """ApiBaseHandler 不进行XSRF cookie检查
-    """
+	"""ApiBaseHandler 不进行XSRF cookie检查
+	"""
 
-    def check_xsrf_cookie(self):
-        """重写check_xsrf_cookie
-        """
-        pass
+	def check_xsrf_cookie(self):
+		"""重写check_xsrf_cookie
+		"""
+		pass
