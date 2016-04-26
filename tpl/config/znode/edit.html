@@ -1,5 +1,10 @@
 <div class="bjui-pageContent">
+{% if download_link %}
  <form class="form-horizontal" role="form" action="{{ action }}" enctype="multipart/form-data" data-toggle="validate" data-reload-navtab="true" data-alertmsg="false">
+{% else %}
+ <form class="form-horizontal" role="form" method="post" action="{{ action }}" enctype="multipart/form-data" data-toggle="validate" data-reload-navtab="true" data-alertmsg="false">
+{% end %}
+
   {% raw xsrf_form_html() %}
   <div class="pageFormContent" data-layout-h="0"><p></p>
 
@@ -30,10 +35,12 @@
    <div class="form-group">
     <label class="col-md-4 control-label">节点值:</label>
     <div class="col-md-8" id="ed_node_data">
-      {% if download_link %}
-        <a type="button" class="btn btn-default" href="{{ download_link }}">点击下载节点文件</a>
+     {% if download_link %}
+    <!--    <a type="button" class="btn btn-default" href="{{ download_link }}">点击下载节点文件</a> -->
+				<input type="file" name="uploadfile">
       {% else %}
-        <input class="form-control" type="text" name="data" value="{{ data }}" size="25">
+	<textarea id="edtInputWord" name ="data" rows="10" cols="30">{{ data }}</textarea>
+       <!-- <input class="form-control" type="text" name="data" value="{{ data }}" size="25">  -->
       {% end %}
     </div>
    </div>
@@ -50,9 +57,10 @@ $("#ed_node_types").change(function(){
     var node_type = $("#ed_node_types option:selected").val();
     //0代表普通节点，1代表文本节点
     if (node_type == "0") {
-      $("#ed_node_data").html('<input class="form-control" type="text" name="data" value="{{ data }}" size="25">');
+     // $("#ed_node_data").html('<input class="form-control" type="text" name="data" value="{{ data }}" size="25">');
+      $("#ed_node_data").html('<textarea id="edtInputWord" name ="data" rows="10" cols="30">{{ data }}</textarea>');
     } else if (node_type == "1" || node_type == "2") {
       $("#ed_node_data").html('<input type="file" name="uploadfile">');
     }
 })
-</script>
+</script> 
