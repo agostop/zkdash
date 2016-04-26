@@ -9,7 +9,7 @@ All rights reserved.
 创 建 者: WangLichao
 创建日期: 2014-10-13
 '''
-import os
+import os,sys
 # tornado
 import tornado.httpserver
 import tornado.ioloop
@@ -64,6 +64,45 @@ class Application(tornado.web.Application):
 					   status,
 					   handler._request_summary(),
 					   request_time)
+			
+
+def daemonize():
+	stdin = '/dev/null'
+	stderr = '/dev/null'
+	stdout = '/dev/null'
+	try: 
+		pid = os.fork() 
+		if pid > 0:
+			# exit first parent
+				sys.exit(0) 
+	except OSError, e: 
+		sys.stderr.write("fork #1 failed: %d (%s)\n" % (e.errno, e.strerror))
+		sys.exit(1)
+	
+	# decouple from parent environment
+	os.chdir(os.path.split(os.path.realpath(__file__))[0]) 
+	os.setsid() 
+	os.umask(0) 
+	
+	# do second fork
+	try: 
+		pid = os.fork() 
+		if pid > 0:
+			# exit from second parent
+			sys.exit(0) 
+	except OSError, e: 
+		sys.stderr.write("fork #2 failed: %d (%s)\n" % (e.errno, e.strerror))
+		sys.exit(1) 
+	
+	# redirect standard file descriptors
+	sys.stdout.flush()
+	sys.stderr.flush()
+	si = file(stdin, 'r')
+	so = file(stdout, 'a+')
+	se = file(stderr, 'a+', 0)
+	os.dup2(si.fileno(), sys.stdin.fileno())
+	os.dup2(so.fileno(), sys.stdout.fileno())
+	os.dup2(se.fileno(), sys.stderr.fileno())
 
 
 def make_clean():
