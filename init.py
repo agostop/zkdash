@@ -13,17 +13,7 @@ import os,sys
 # tornado
 import tornado.httpserver
 import tornado.ioloop
-# lib
-from lib import load
-from lib import uimodule, uimethods
-from lib.utils import logger
-from lib.utils import pyshell
-# conf
-from conf import log
-from conf.settings import (
-	LOG_ITEMS,
-	OPTIONS,
-)
+
 
 
 class Application(tornado.web.Application):
@@ -114,6 +104,18 @@ def make_clean():
 def main():
 	"""主程序入口
 	"""
+# lib
+	from lib import load
+	from lib import uimodule, uimethods
+	from lib.utils import logger
+	from lib.utils import pyshell
+	# conf
+	from conf import log
+	from conf.settings import (
+		LOG_ITEMS,
+		OPTIONS,
+	)
+	
 	logger.init_logger(LOG_ITEMS, suffix=OPTIONS.port)
 	application = Application()
 	http_server = tornado.httpserver.HTTPServer(application,
